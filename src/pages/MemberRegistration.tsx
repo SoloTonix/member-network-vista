@@ -40,9 +40,9 @@ const MemberRegistration = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Mock submission - in real app, this would save to database
     console.log("Member Registration Data:", formData);
     
