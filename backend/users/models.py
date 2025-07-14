@@ -42,6 +42,7 @@ class Member(models.Model):
     bank_account_no = models.CharField(max_length=20, blank=True, null=True)
 
     # Referral Information
+    no_referrals = models.IntegerField(default=0, blank=True, null=True)
     referral_phone = models.CharField(max_length=20, blank=True, null=True)
     referral_code_id = models.CharField(max_length=50, blank=True, null=True)
 

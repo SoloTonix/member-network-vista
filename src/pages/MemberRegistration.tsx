@@ -7,10 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Save, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 const MemberRegistration = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
     fullName: "",
@@ -42,8 +45,36 @@ const MemberRegistration = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     // Mock submission - in real app, this would save to database
+    try{
+    const member = {
+        full_name: formData.fullName,
+        code_id: formData.codeId,
+        email: formData.email,
+        phone: formData.phone,
+        whatsapp: formData.whatsapp,
+        address: formData.address,
+        occupation: formData.occupation,
+        date_of_birth: formData.dateOfBirth || null,
+        bank_name: formData.bankName,
+        bank_account_no: formData.bankAccountNo,
+        referral_phone: formData.referralPhone,
+        referral_code_id: formData.referralCodeId,
+        next_of_kin_name: formData.nextOfKinName,
+        next_of_kin_phone: formData.nextOfKinPhone,
+        next_of_kin_email: formData.nextOfKinEmail,
+        next_of_kin_address: formData.nextOfKinAddress,
+        stage: formData.stage
+    }
+
+    const config =         {
+          headers: {
+            
+            'Content-Type': 'application/json'
+          }
+        }
+    const response = await axios.post('http://localhost:8000/users/members/', member, config);
     console.log("Member Registration Data:", formData);
     
     toast({
@@ -71,6 +102,21 @@ const MemberRegistration = () => {
       nextOfKinAddress: "",
       stage: "1"
     });
+
+    }
+    catch(err){
+      console.error('Registration failed', err);
+      toast({
+        title: "Registration Failed",
+        description: err.response?.data?.message || "An error occurred while registering the member",
+        variant: "destructive",
+      });
+    }
+    finally{
+      setIsSubmitting(false);
+    }
+
+
   };
 
   return (
