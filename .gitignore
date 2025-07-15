@@ -75,5 +75,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Backend
-backend/backend/.env
+# .Env
+.env

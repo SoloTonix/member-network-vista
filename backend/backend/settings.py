@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os 
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wjel7uwjfp@%z7es(ibvrhhi1bs8)hg#x#e$+zge#1uu(a3c^4'
+SECRET_KEY = os.getenv('secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('debug', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('allowed_hosts', '').split(',')
+
 
 
 # Application definition
@@ -46,7 +49,12 @@ INSTALLED_APPS = [
     'users',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS settings (if your frontend is separate)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    "http://frontend:3000",  # Docker service name
+]
+CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 # REST Framework + JWT
 REST_FRAMEWORK = {
@@ -104,22 +112,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #   }
 #}
 
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-database_pd = os.getenv('database_pd')
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'MemberNetworkVista_DB',          # Replace with your DB name
-        'USER': 'root',       # Replace with your MySQL user
-        'PASSWORD': database_pd,  # Replace with your MySQL password
-        'HOST': 'localhost',             # Or your DB host IP/domain
-        'PORT': '3306',                  # Default MySQL port
+        'NAME': os.getenv('db_name'),          # Replace with your DB name
+        'USER': os.getenv('db_user'),       # Replace with your MySQL user
+        'PASSWORD': os.getenv('db_password'),  # Replace with your MySQL password
+        'HOST': os.getenv('db_host'),             # Or your DB host IP/domain
+        'PORT': os.getenv('db_port'),                  # Default MySQL port
     }
 }
 
@@ -158,7 +158,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
