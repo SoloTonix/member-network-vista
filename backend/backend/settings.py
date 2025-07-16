@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 # CORS settings (if your frontend is separate)
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
-    "http://frontend:3000",  # Docker service name
+    "https://member-network-vista.drtechltd.com"  # Docker service name
 ]
 CORS_ORIGIN_ALLOW_ALL = DEBUG
 
