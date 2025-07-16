@@ -25,6 +25,7 @@ dist-ssr
 
 # Backend
 backend/b# Logs
+backend/backend/__pycache__/
 logs
 *.log
 npm-debug.log*
